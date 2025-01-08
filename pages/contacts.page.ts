@@ -3,7 +3,7 @@ import BasePage from './base.page';
 
 export default class ContactsPage extends BasePage {
     get contactFileLastNamePlaceHolder() {
-        return this.page.locator('//records-entity-label[text()="Contact"]/parent::slot/parent::div/following-sibling::slot/child::lightning-formatted-name')
+        return this.page.locator('records-highlights2 lightning-formatted-name');
     }
     specificContactName(contactName: String) {
         return this.page.locator(`a[data-refid="recordId"][title=${contactName}]`) 

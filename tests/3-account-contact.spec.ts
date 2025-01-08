@@ -19,7 +19,7 @@ test.describe('Creating new Contact and Account', () => {
         contactsPage = new ContactsPage(page);
     });
     test.beforeEach(async ({ page }) => {
-        await page.goto(process.env.BASE_URL!);
+        await await homePage.navigateToApplication(process.env.BASE_URL!);
         await loginPage.login(process.env.TESTUSERNAME!, process.env.PASSWORD!);
         await homePage.clickHomeTab();
         await expect(homePage.titleText).toContainText('Welcome', { timeout: 20000 });
@@ -31,7 +31,7 @@ test.describe('Creating new Contact and Account', () => {
     });
     // test.afterAll(async ({ page }) => {
     //     const context = page.context();
-    //     await page.goto(process.env.BASE_URL!);
+    //     await await homePage.navigateToApplication(process.env.BASE_URL!);
     //     await loginPage.login(process.env.TESTUSERNAME!, process.env.PASSWORD!);
     //     await homePage.clickAccountsTab();
     //     await accountsPage.deleteSpecificAccount(accountName);
