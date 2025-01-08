@@ -5,6 +5,12 @@ export default class ContactsPage extends BasePage {
     get contactFileLastNamePlaceHolder() {
         return this.page.locator('//records-entity-label[text()="Contact"]/parent::slot/parent::div/following-sibling::slot/child::lightning-formatted-name')
     }
+    specificContactName(contactName: String) {
+        return this.page.locator(`a[data-refid="recordId"][title=${contactName}]`) 
+    }
+    specificContactActionsDropdown(contactName: String) {
+        return this.page.locator(`//a[@data-refid="recordId"][@title='${contactName}']/ancestor::tr/descendant::ul[@class='oneActionsRibbon']`) 
+    }
     get contactFileActionsDropDown() {
         return this.page.locator('records-highlights2').getByRole('button', { name: 'Show more actions' })
     }
@@ -14,9 +20,6 @@ export default class ContactsPage extends BasePage {
     get deleteButton() {
         return this.page.getByRole('button', { name: 'Delete' });
     }
-    specificContactName(contactName: String) {
-        return this.page.getByRole('link', { name: `${contactName}` })
-    }
 
     constructor(page: Page) {
         super(page);
@@ -25,8 +28,13 @@ export default class ContactsPage extends BasePage {
     async getContactFileLastName() {
         return await this.contactFileLastNamePlaceHolder.textContent();
     }
-    async deleteCreatedContact() {
-        await this.contactFileActionsDropDown.click();
+    async openSpecificContactActionsDropdown(contactName: String) {
+        await this.specificContactName(contactName).locator('xpath=./ancestor::tr/descendant::a[@role="button"]').click();
+    }
+    async openSpecificContactFile(contactName: String) {
+        await this.specificContactName(contactName).click();
+    }
+    async deleteContact() {
         await this.deleteOption.click();
         await this.deleteButton.click();
     }

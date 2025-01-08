@@ -11,6 +11,7 @@ test.beforeEach(({ page }) => {
 });
 test('Test 01: Positive Login Test', async ({ page }) => {
     await page.goto(process.env.BASE_URL!);
-    await loginPage.login('jacekmarkevicz-4gyr@force.com', process.env.PASSWORD!);
+    await loginPage.login(process.env.TESTUSERNAME!, process.env.PASSWORD!);
+    await homePage.clickHomeTab();
     await expect(homePage.titleText).toContainText('Welcome', { timeout: 20000 });
 });
