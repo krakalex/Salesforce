@@ -87,3 +87,4 @@ export default defineConfig({
   //   reuseExistingServer: !process.env.CI,
   // },
 });
+export const extendedTimeout = { timeout: 20000 };

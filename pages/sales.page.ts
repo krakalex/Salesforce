@@ -1,5 +1,6 @@
 import { Page } from '@playwright/test';
 import BasePage from './base.page';
+import { extendedTimeout } from 'playwright.config';
 
 export default class SalesPage extends BasePage {
     get newLeadButton() {
@@ -47,11 +48,16 @@ export default class SalesPage extends BasePage {
     get saveButton() {
         return this.page.getByRole('button', { name: 'Save' });
     }
-
     get selectConvertedStatusButton() {
         return this.page.locator('button').filter({ hasText: 'Select Converted Status' });
     }
+    get completeStatusButton() {
+        return this.page.locator('button').filter({ hasText: 'Mark Status as Complete' })
+    }
     get convertTheLeadButton() {
+        return this.page.getByRole('button', { name: 'Convert' })
+    }
+    get convertTheLeadPopupButton() {
         return this.page.locator('//button[text()="Convert"][@class="slds-button slds-button_brand"]');
     }
     get successHeading() {
@@ -68,7 +74,7 @@ export default class SalesPage extends BasePage {
 
     
     async clickNewLeadButton() {
-        await this.newLeadButton.click({ timeout: 20000 });
+        await this.newLeadButton.click(extendedTimeout);
     }
     async enterLeadLastName(lastName: string) {
         await this.newLeadLastNameInput.fill(lastName);
@@ -96,16 +102,16 @@ export default class SalesPage extends BasePage {
         await this.markAsCurrentButton.click();
     }
     async revertStatusToNew() {
-        await this.specificStatusTab('New').locator('xpath=./descendant::lightning-icon[@icon-name="utility:check"]').waitFor({state: 'visible', timeout: 20000});;
+        await this.specificStatusTab('New').locator('xpath=./descendant::lightning-icon[@icon-name="utility:check"]').waitFor({state: 'visible'});
         await this.specificStatusTab('New').click();
         await this.markAsCurrentButton.click();
     }
     async changeStatusToConverted() {
-        await this.specificStatusTab('converted').click({ timeout: 20000 });
-        await this.selectConvertedStatusButton.click();
         await this.convertTheLeadButton.click();
+        await this.page.getByText('0 Account Matches', { exact: true }).waitFor({state: 'visible'});
+        await this.convertTheLeadPopupButton.click();
     } 
-    async reurnToLeads() {
+    async returnToLeads() {
         await this.goToLeadsButton.click();
     }
 }

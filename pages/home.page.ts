@@ -1,5 +1,6 @@
 import { Page } from '@playwright/test';
 import BasePage from './base.page';
+import { extendedTimeout } from 'playwright.config';
 
 export default class HomePage extends BasePage {
     get titleText() {
@@ -48,7 +49,7 @@ export default class HomePage extends BasePage {
     }
 
     async clickHomeTab() {
-        return await this.homeTab.click({ timeout: 20000 });
+        return await this.homeTab.click(extendedTimeout);
     }
     async clickAccountsTab() {
         await this.accountsTab.click();
@@ -82,7 +83,7 @@ export default class HomePage extends BasePage {
         await this.saveButton.click();
     }
     async clickSalesTab() {
-        await this.salesTab.click({ timeout: 20000 });
+        await this.salesTab.click(extendedTimeout);
     }
 
 }   

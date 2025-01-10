@@ -21,13 +21,9 @@ test.describe('Lead creating', () => {
         await homePage.navigateToApplication(process.env.BASE_URL!);
         await loginPage.login(process.env.TESTUSERNAME!, process.env.PASSWORD!);
     });
-    // test.afterEach(async ({ page }) => {
-    //     const context = page.context();
-    //     await context.clearCookies();
-    //     await page.evaluate(() => sessionStorage.clear());
-    // });
+
     test('Test 07: Create New Lead', async ({ page }) => {
-        await homePage.clickHomeTab();
+        await homePage.clickSalesTab();
         await salesPage.clickNewLeadButton();
         let leadCompany = 'Testleadcompany';
         await salesPage.enterLeadLastName('Testleadlastname');
@@ -48,9 +44,8 @@ test.describe('Lead creating', () => {
         expect(salesPage.filledStatusField('New')).toBeVisible();
     });
 
-    test('Test 09: Complete the Lead', async ({ page }) => {
+    test.only('Test 09: Complete the Lead', async ({ page }) => {
         let leadCompany = 'Testleadcompany';
-        await page.setViewportSize({ width: 1280, height: 500 });
         await homePage.clickSalesTab();
         await salesPage.clickNewLeadButton();
         await salesPage.enterLeadLastName('Testleadlastname');
@@ -58,7 +53,7 @@ test.describe('Lead creating', () => {
         await salesPage.saveNewLead();
         await salesPage.changeStatusToConverted();
         await expect(salesPage.successHeading).toBeVisible();
-        await salesPage.reurnToLeads();
+        await salesPage.returnToLeads();
         await homePage.clickAccountsTab();
         await accountsPage.deleteSpecificAccount(leadCompany);
     });

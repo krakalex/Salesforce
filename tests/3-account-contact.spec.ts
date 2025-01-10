@@ -4,13 +4,13 @@ import AccountsPage from 'pages/accounts.page';
 import LoginPage from 'pages/login.page';
 import ContactsPage from 'pages/contacts.page';
 import { access } from 'fs';
+import { extendedTimeout } from 'playwright.config';
 
 test.describe('Creating Account, Contact and linking the necessities', () => {
     let homePage: HomePage;
     let loginPage: LoginPage;
     let accountsPage: AccountsPage;
     let contactsPage: ContactsPage;
-    const extendedTimeout = { timeout: 20000 };
     let accountName = 'Accnam';
 
     test.beforeEach(({ page }) => {
@@ -71,6 +71,7 @@ test.describe('Creating Account, Contact and linking the necessities', () => {
         let uploadFileName = '70100005.JPG';
         await accountsPage.uploadSpecificFile(uploadFileName);
         await accountsPage.confirmUpload();
+        await accountsPage.uploadSpecificOwnedFile(uploadFileName);
         await expect(accountsPage.specificFileName(uploadFileName)).toBeVisible();
         await accountsPage.deleteSpecificUploadFile(uploadFileName);
         await expect(accountsPage.specificFileName(uploadFileName)).not.toBeVisible();

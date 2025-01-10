@@ -1,7 +1,6 @@
 import { Page } from '@playwright/test';
 import BasePage from './base.page';
 import path from 'path';
-import { TIMEOUT } from 'dns';
 
 export default class AccountPage extends BasePage {
     specificAccountName(accountName: String) {
@@ -32,7 +31,7 @@ export default class AccountPage extends BasePage {
         return this.page.locator(`//article[@aria-label="Opportunities"]/descendant::article[@aria-label='${opportunityName}']`)
     }
     get firstOpportunityActionsDropdown() {
-        return this.page.getByRole('button', { name: 'Show Actions' }).nth(1);
+        return this.page.getByRole('button', { name: 'Show Actions' }).first();
     }
     get deleteTheOpportunityOption() {
         return this.page.getByRole('menuitem', { name: 'Delete' });
@@ -43,8 +42,20 @@ export default class AccountPage extends BasePage {
     get doneUploadButton() {
         return this.page.getByRole('button', { name: 'Done' });
     }
+    get filesActionsDropdown() {
+        return this.page.getByRole('button', { name: 'Show actions for Files' })
+    }
+    get addFilesOption() {
+        return this.page.getByRole('menuitem', { name: 'Add Files' }).first();
+    }
     specificFileName(fileName: String) {
-        return this.page.locator(`span[title='${fileName.substring(0, fileName.indexOf('.'))}']`);
+        return this.page.locator(`span[class*="desktop"][title='${fileName.substring(0, fileName.indexOf('.'))}']`);
+    }
+    specificOwnedFile(fileName: String) {
+        return this.page.locator(`//span[@title='${fileName.substring(0, fileName.indexOf('.'))}']/ancestor::a[@role='option']`)
+    }
+    get addOwnedFileButton() {
+        return this.page.getByRole('button', { name: 'Add (1)' });
     }
     get fileActionsDropdown() {
         return this.page.getByRole('button', { name: 'Show More' });
@@ -65,7 +76,7 @@ export default class AccountPage extends BasePage {
         await this.allAccountNames.filter({ hasText: `${accountName}` });
     }
     async deleteSpecificAccount(accountName: String) {
-        await this.accountsHeading.waitFor({state: 'visible', timeout: 20000});
+        await this.accountsHeading.waitFor({state: 'visible'});
         await this.allAccountNames.filter({ hasText: `${accountName}` }).click();
         await this.accountActionsDropdown.click();
         await this.deleteDropdownOption.click();
@@ -93,6 +104,13 @@ export default class AccountPage extends BasePage {
     }
     async confirmUpload() {
         await this.doneUploadButton.click();
+    }
+    async uploadSpecificOwnedFile(fileName: string) {
+        await this.filesActionsDropdown.click();
+        await this.addFilesOption.click();
+        await this.specificOwnedFile(fileName).click();
+        await this.addOwnedFileButton.click()
+        
     }
     async deleteSpecificUploadFile(fileName: string) {
         await this.specificFileName(fileName).click();
