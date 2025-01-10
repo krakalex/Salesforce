@@ -9,7 +9,7 @@ export default class HomePage extends BasePage {
         return this.page.getByText('HomeHome');
     }
     get accountsTab() {
-        return this.page.getByRole('link', { name: 'Accounts', exact: true });
+        return this.page.locator('//span[text()="Accounts"][contains(@class, "small")]/parent::a[@tabindex="0"]');
     }
     get contactsTab() {
         return this.page.getByRole('link', { name: 'Contacts', exact: true })
@@ -38,6 +38,9 @@ export default class HomePage extends BasePage {
     get allAccountOptions() {
         return this.page.locator('//ul[@aria-label="Recent Accounts"]/descendant::span[@class="slds-truncate"]');
     }
+    get salesTab() {
+        return this.page.getByRole('link', { name: 'Sales' });
+    }
 
 
     constructor(page: Page) {
@@ -45,7 +48,7 @@ export default class HomePage extends BasePage {
     }
 
     async clickHomeTab() {
-        return await this.homeTab.click();
+        return await this.homeTab.click({ timeout: 20000 });
     }
     async clickAccountsTab() {
         await this.accountsTab.click();
@@ -78,6 +81,8 @@ export default class HomePage extends BasePage {
     async clickSavebutton() {
         await this.saveButton.click();
     }
-
+    async clickSalesTab() {
+        await this.salesTab.click({ timeout: 20000 });
+    }
 
 }   

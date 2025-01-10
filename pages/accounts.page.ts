@@ -52,6 +52,10 @@ export default class AccountPage extends BasePage {
     get deleteTheFileOption() {
         return this.page.getByRole('link', { name: 'Delete' });
     }
+    get accountsHeading() {
+        return this.page.getByRole('heading', { name: 'Accounts' }).locator('span');
+    }
+    
 
 
     constructor(page: Page) {
@@ -61,6 +65,7 @@ export default class AccountPage extends BasePage {
         await this.allAccountNames.filter({ hasText: `${accountName}` });
     }
     async deleteSpecificAccount(accountName: String) {
+        await this.accountsHeading.waitFor({state: 'visible', timeout: 20000});
         await this.allAccountNames.filter({ hasText: `${accountName}` }).click();
         await this.accountActionsDropdown.click();
         await this.deleteDropdownOption.click();
@@ -79,17 +84,15 @@ export default class AccountPage extends BasePage {
         await this.saveButton.click();
     }
     async deleteSpecificOpportunity(opportunityName: string) {
-        // await this.specificOpportunity(opportunityName).locator('/descendant::button[@aria-expanded="false"]').click();
         await this.firstOpportunityActionsDropdown.click();
         await this.deleteTheOpportunityOption.click();
         await this.deleteButton.click();
     }
     async uploadSpecificFile(filepath: string) {
-        // await this.fileInput.scrollIntoViewIfNeeded({ timeout: 30000 });
         await this.fileInput.setInputFiles(path.join('upload-data', filepath));
     }
     async confirmUpload() {
-        await this.doneUploadButton.click({ timeout: 10000 });
+        await this.doneUploadButton.click();
     }
     async deleteSpecificUploadFile(fileName: string) {
         await this.specificFileName(fileName).click();

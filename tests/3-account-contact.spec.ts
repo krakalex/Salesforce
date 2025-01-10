@@ -5,11 +5,12 @@ import LoginPage from 'pages/login.page';
 import ContactsPage from 'pages/contacts.page';
 import { access } from 'fs';
 
-test.describe('Creating new Contact and Account', () => {
+test.describe('Creating Account, Contact and linking the necessities', () => {
     let homePage: HomePage;
     let loginPage: LoginPage;
     let accountsPage: AccountsPage;
     let contactsPage: ContactsPage;
+    const extendedTimeout = { timeout: 20000 };
     let accountName = 'Accnam';
 
     test.beforeEach(({ page }) => {
@@ -21,24 +22,11 @@ test.describe('Creating new Contact and Account', () => {
     test.beforeEach(async ({ page }) => {
         await await homePage.navigateToApplication(process.env.BASE_URL!);
         await loginPage.login(process.env.TESTUSERNAME!, process.env.PASSWORD!);
-        await homePage.clickHomeTab();
-        await expect(homePage.titleText).toContainText('Welcome', { timeout: 20000 });
     });
-    test.afterEach(async ({ page }) => {
-        const context = page.context();
-        await context.clearCookies();
-        await page.evaluate(() => sessionStorage.clear());
-    });
-    // test.afterAll(async ({ page }) => {
-    //     const context = page.context();
-    //     await await homePage.navigateToApplication(process.env.BASE_URL!);
-    //     await loginPage.login(process.env.TESTUSERNAME!, process.env.PASSWORD!);
-    //     await homePage.clickAccountsTab();
-    //     await accountsPage.deleteSpecificAccount(accountName);
-    // });
 
     test('Test 03: Create New Account', async ({ page }) => {
-        await expect(homePage.newContactButton).toBeEnabled({ timeout: 20000 });
+        await homePage.clickHomeTab();
+        await expect(homePage.newContactButton).toBeEnabled(extendedTimeout);
         await homePage.clickNewContactButton();
         await homePage.clickAccountNameDropDown();
         await homePage.clickNewAccountOption();
@@ -54,6 +42,7 @@ test.describe('Creating new Contact and Account', () => {
     });
 
     test('Test 04: Create New Contact', async ({ page }) => {
+        await homePage.clickHomeTab();
         await homePage.clickNewContactButton();
         await homePage.clickAccountNameDropDown();
         await homePage.pickSpecificAccountOption('first_account');
