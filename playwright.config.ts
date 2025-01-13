@@ -30,23 +30,25 @@ export default defineConfig({
     // baseURL: 'http://127.0.0.1:3000',
 
     /* Collect trace when retrying the failed test. See https://playwright.dev/docs/trace-viewer */
-    viewport: { width: 1920, height: 500 },
     headless: false,
     trace: 'retain-on-failure',
-    actionTimeout: 5000,
-    navigationTimeout: 15000,
+    actionTimeout: 20000,
+    navigationTimeout: 20000,
     screenshot: 'only-on-failure'
   },
 
   timeout: 60000,
-  expect: { timeout: 5000},
+  expect: { timeout: 20000},
 
   /* Configure projects for major browsers */
   projects: [
     process.env.BROWSER === 'chrome' ?
     {
       name: 'chromium',
-      use: { ...devices['Desktop Chrome'] },
+      use: { 
+        ...devices['Desktop Chrome'],
+        // viewport: { width: 1920, height: 500 },
+      },
     } :
 
     {

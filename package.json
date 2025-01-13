@@ -2,7 +2,9 @@
   "name": "salesforce-qa12j-aliaksandr-krakasevich",
   "version": "1.0.0",
   "description": "",
-  "scripts": {},
+  "scripts": {
+    "test": "npx playwright test"
+  },
   "keywords": [],
   "author": "Aliaksandr Krakasevich",
   "license": "ISC",

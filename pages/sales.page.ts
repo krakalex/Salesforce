@@ -19,7 +19,7 @@ export default class SalesPage extends BasePage {
         return this.page.locator('records-highlights2 lightning-formatted-name');
     }
     get leadFileActionsDropDown() {
-        return this.page.getByRole('button', { name: 'Show more actions' })
+        return this.page.getByRole('button', { name: 'Show more actions' });
     }
     get deleteOption() {
         return this.page.getByRole('menuitem', { name: 'Delete' });
@@ -34,7 +34,7 @@ export default class SalesPage extends BasePage {
         return this.page.locator(`a[data-refid="recordId"][title='${leadLastname}']`);
     }
     specificStatusTab(status: string) {
-        return this.page.locator(`a[data-tab-name='${status}']`)
+        return this.page.locator(`a[data-tab-name='${status}']`);
     }
     get markAsCurrentButton() {
         return this.page.locator('button').filter({ hasText: 'Mark as Current Status' });
@@ -55,16 +55,16 @@ export default class SalesPage extends BasePage {
         return this.page.locator('button').filter({ hasText: 'Select Converted Status' });
     }
     get completeStatusButton() {
-        return this.page.locator('button').filter({ hasText: 'Mark Status as Complete' })
+        return this.page.locator('button').filter({ hasText: 'Mark Status as Complete' });
     }
     get convertTheLeadButton() {
-        return this.page.getByRole('button', { name: 'Convert' })
+        return this.page.getByRole('button', { name: 'Convert' });
     }
     get convertTheLeadPopupButton() {
         return this.page.locator('//button[text()="Convert"][@class="slds-button slds-button_brand"]');
     }
     get successHeading() {
-        return this.page.getByRole('heading', { name: 'Your lead has been converted' })
+        return this.page.getByRole('heading', { name: 'Your lead has been converted' });
     }
     get goToLeadsButton() {
         return this.page.getByRole('button', { name: 'Go to Leads' });
@@ -72,22 +72,20 @@ export default class SalesPage extends BasePage {
     get leadsTab() {
         return this.page.getByRole('link', { name: 'Leads' });
     }
-    
 
     constructor(page: Page) {
         super(page);
     }
 
-    
     async clickNewLeadButton() {
         await this.leadsTab.click();
-        await this.page.getByRole('row', { name: 'Select item 1' }).getByRole('button').waitFor({state: 'visible'});
-        await this.leadLastNames.waitFor({state: 'visible'});
+        await this.page.getByRole('row', { name: 'Select item 1' }).getByRole('button').waitFor({ state: 'visible' });
+        await this.leadLastNames.waitFor({ state: 'visible' });
         await this.newLeadButton.click();
     }
     async enterLeadLastName(lastName: string) {
-        await this.newLeadLastNameInput.fill(lastName, extendedTimeout);
-    } 
+        await this.newLeadLastNameInput.fill(lastName);
+    }
     async enterLeadCompany(leadCompany: string) {
         await this.newLeadCompanyInput.fill(leadCompany);
     }
@@ -96,7 +94,7 @@ export default class SalesPage extends BasePage {
     }
 
     async clickLeadFileActionsDropDown() {
-        await this.leadFileActionsDropDown.click(extendedTimeout);
+        await this.leadFileActionsDropDown.click();
     }
     async deleteTheLead() {
         await this.deleteOption.click();
@@ -105,23 +103,23 @@ export default class SalesPage extends BasePage {
 
     async openSpecificLeadFile(leadLastname: string) {
         await this.leadsTab.click();
-        await this.specificLeadListName(leadLastname).click()
+        await this.specificLeadListName(leadLastname).click();
     }
     async changeLeadStatus(desiredStatus: string) {
-        await this.specificStatusTab(desiredStatus).click(extendedTimeout);
+        await this.specificStatusTab(desiredStatus).click();
         await this.markAsCurrentButton.click();
     }
     async revertStatusToNew() {
-        await this.specificStatusTab('New').locator('xpath=./descendant::lightning-icon[@icon-name="utility:check"]').waitFor({state: 'visible'});
+        await this.specificStatusTab('New').locator('xpath=./descendant::lightning-icon[@icon-name="utility:check"]').waitFor({ state: 'visible' });
         await this.specificStatusTab('New').click();
-        await this.page.locator('a[data-tab-name="New"][aria-selected="true"]').waitFor({state: 'visible'});
+        await this.page.locator('a[data-tab-name="New"][aria-selected="true"]').waitFor({ state: 'visible' });
         await this.markAsCurrentButton.click();
     }
     async changeStatusToConverted() {
         await this.convertTheLeadButton.click();
-        await this.page.getByText('0 Account Matches', { exact: true }).waitFor({state: 'visible', ...extendedTimeout});
+        await this.page.getByText('0 Account Matches', { exact: true }).waitFor({ state: 'visible' });
         await this.convertTheLeadPopupButton.click();
-    } 
+    }
     async returnToLeads() {
         await this.goToLeadsButton.click();
     }

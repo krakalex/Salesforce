@@ -1,6 +1,5 @@
 import { Page } from '@playwright/test';
 import BasePage from './base.page';
-import { extendedTimeout } from 'playwright.config';
 
 export default class HomePage extends BasePage {
     get titleText() {
@@ -69,20 +68,20 @@ export default class HomePage extends BasePage {
     get markTheTaskAsCompleteButton() {
         return this.page.getByTitle('Mark Complete');
     }
-    
+
     constructor(page: Page) {
         super(page);
     }
 
     async clickHomeTab() {
-        return await this.homeTab.click(extendedTimeout);
+        return await this.homeTab.click();
     }
     async clickAccountsTab() {
-        await this.accountsTab.click(extendedTimeout);
+        await this.accountsTab.click();
         await this.accountsInnerTab.click();
     }
     async clickContactsTab() {
-        await this.contactsTab.click(extendedTimeout);
+        await this.contactsTab.click();
         await this.contactsInnerTab.click();
     }
 
@@ -90,14 +89,14 @@ export default class HomePage extends BasePage {
         await this.newContactButton.click();
     }
     async clickAccountNameDropDown() {
-        await this.page.locator('force-record-avatar span').waitFor({state: 'visible', ...extendedTimeout});
-        await this.accountNameDropDown.click(extendedTimeout);
+        await this.page.locator('force-record-avatar span').waitFor({ state: 'visible' });
+        await this.accountNameDropDown.click();
     }
     async clickNewAccountOption() {
         await this.newAccountOption.click();
     }
     async enterAccountName(accountName: string) {
-        await this.accountNameInput.fill(accountName, extendedTimeout)
+        await this.accountNameInput.fill(accountName);
     }
     async clickCloseTheWindowButton() {
         await this.closeTheWindowButton.click();
@@ -112,15 +111,15 @@ export default class HomePage extends BasePage {
         await this.saveButton.click();
     }
     async clickSalesTab() {
-        await this.salesTab.click(extendedTimeout);
+        await this.salesTab.click();
     }
-    
+
     async clickToDoListButton() {
         await this.toDoListButton.click();
     }
     async addNewCallTask() {
         await this.newTaskButton.click();
-        await this.newTaskSubjectDropdown.click(extendedTimeout);
+        await this.newTaskSubjectDropdown.click();
         await this.callOption.click();
         await this.saveButton.click();
     }
@@ -130,5 +129,4 @@ export default class HomePage extends BasePage {
     async clickHomeCloudButton() {
         await this.homeCloudButton.click();
     }
-
-}   
+}

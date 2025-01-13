@@ -1,11 +1,10 @@
 import { Page } from '@playwright/test';
 import BasePage from './base.page';
 import path from 'path';
-import { extendedTimeout } from 'playwright.config';
 
 export default class AccountPage extends BasePage {
     specificAccountName(accountName: String) {
-        return this.page.locator(`a[data-refid="recordId"][title=${accountName}]`)
+        return this.page.locator(`a[data-refid="recordId"][title=${accountName}]`);
     }
     get allAccountNames() {
         return this.page.locator('a[data-refid="recordId"]');
@@ -26,10 +25,10 @@ export default class AccountPage extends BasePage {
         return this.page.getByLabel('Opportunity Name');
     }
     get saveButton() {
-        return this.page.getByRole('button', { name: 'Save' })
+        return this.page.getByRole('button', { name: 'Save' });
     }
     specificOpportunity(opportunityName: String) {
-        return this.page.locator(`//article[@aria-label="Opportunities"]/descendant::article[@aria-label='${opportunityName}']`)
+        return this.page.locator(`//article[@aria-label="Opportunities"]/descendant::article[@aria-label='${opportunityName}']`);
     }
     get firstOpportunityActionsDropdown() {
         return this.page.getByRole('button', { name: 'Show Actions' }).first();
@@ -44,7 +43,7 @@ export default class AccountPage extends BasePage {
         return this.page.getByRole('button', { name: 'Done' });
     }
     get filesActionsDropdown() {
-        return this.page.getByRole('button', { name: 'Show actions for Files' })
+        return this.page.getByRole('button', { name: 'Show actions for Files' });
     }
     get addFilesOption() {
         return this.page.getByRole('menuitem', { name: 'Add Files' }).first();
@@ -53,7 +52,7 @@ export default class AccountPage extends BasePage {
         return this.page.locator(`span[class*="desktop"][title='${fileName.substring(0, fileName.indexOf('.'))}']`);
     }
     specificOwnedFile(fileName: String) {
-        return this.page.locator(`//span[@title='${fileName.substring(0, fileName.indexOf('.'))}']/ancestor::a[@role='option']`)
+        return this.page.locator(`//span[@title='${fileName.substring(0, fileName.indexOf('.'))}']/ancestor::a[@role='option']`);
     }
     get addOwnedFileButton() {
         return this.page.getByRole('button', { name: 'Add (1)' });
@@ -67,8 +66,6 @@ export default class AccountPage extends BasePage {
     get accountsHeading() {
         return this.page.getByRole('heading', { name: 'Accounts' }).locator('span');
     }
-    
-
 
     constructor(page: Page) {
         super(page);
@@ -77,31 +74,31 @@ export default class AccountPage extends BasePage {
         await this.allAccountNames.filter({ hasText: `${accountName}` });
     }
     async deleteSpecificAccount(accountName: String) {
-        await this.accountsHeading.waitFor({state: 'visible', ...extendedTimeout});
+        await this.accountsHeading.waitFor({ state: 'visible' });
         await this.allAccountNames.filter({ hasText: `${accountName}` }).click();
         await this.accountActionsDropdown.click();
         await this.deleteDropdownOption.click();
         await this.deleteButton.click();
     }
     async openSpecificAccountFile(accountName: String) {
-        await this.specificAccountName(accountName).click(extendedTimeout);
+        await this.specificAccountName(accountName).click();
     }
     async clickNewOpportunityButton() {
-        await this.newOpportunityButton.click(extendedTimeout);
+        await this.newOpportunityButton.click();
     }
     async enterOpportunityName(opportunityName: string) {
-        await this.newOpportunityNameInput.fill(opportunityName, extendedTimeout)
+        await this.newOpportunityNameInput.fill(opportunityName);
     }
     async saveNewOpportunity() {
         await this.saveButton.click();
     }
     async deleteSpecificOpportunity(opportunityName: string) {
         await this.firstOpportunityActionsDropdown.click();
-        await this.deleteTheOpportunityOption.click(extendedTimeout);
+        await this.deleteTheOpportunityOption.click();
         await this.deleteButton.click();
     }
     async uploadSpecificFile(filepath: string) {
-        await this.fileInput.setInputFiles(path.join('upload-data', filepath), extendedTimeout);
+        await this.fileInput.setInputFiles(path.join('upload-data', filepath));
     }
     async confirmUpload() {
         await this.doneUploadButton.click();
@@ -110,14 +107,12 @@ export default class AccountPage extends BasePage {
         await this.filesActionsDropdown.click();
         await this.addFilesOption.click();
         await this.specificOwnedFile(fileName).click();
-        await this.addOwnedFileButton.click()
-        
+        await this.addOwnedFileButton.click();
     }
     async deleteSpecificUploadFile(fileName: string) {
         await this.specificFileName(fileName).click();
         await this.fileActionsDropdown.click();
-        await this.deleteTheFileOption.click()
+        await this.deleteTheFileOption.click();
         await this.deleteButton.click();
     }
-    
 }

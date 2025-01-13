@@ -4,7 +4,6 @@ import AccountsPage from 'pages/accounts.page';
 import LoginPage from 'pages/login.page';
 import ContactsPage from 'pages/contacts.page';
 import { access } from 'fs';
-import { extendedTimeout } from 'playwright.config';
 
 test.describe('Creating Account, Contact and linking the necessities', () => {
     let homePage: HomePage;
@@ -23,10 +22,10 @@ test.describe('Creating Account, Contact and linking the necessities', () => {
         await homePage.navigateToApplication(process.env.BASE_URL!);
         await loginPage.login(process.env.TESTUSERNAME!, process.env.PASSWORD!);
         await homePage.clickHomeTab();
-        await expect(homePage.titleText).toContainText('Welcome', extendedTimeout);
+        await expect(homePage.titleText).toContainText('Welcome');
     });
 
-    test('Test 04: Create New Account @regression', async ({ page }) => {
+    test('Test 04: Create New Account', { tag: '@regression' }, async ({ page }) => {
         await homePage.clickContactsTab();
         await contactsPage.clickNewContactButton();
         await homePage.clickAccountNameDropDown();
@@ -34,7 +33,7 @@ test.describe('Creating Account, Contact and linking the necessities', () => {
         let accountNameT = 'TestAccount';
         await homePage.enterAccountName(accountNameT);
         await homePage.clickSavebutton();
-        await expect(homePage.accountNameDropDown).toHaveAttribute('placeholder', accountNameT, extendedTimeout);
+        await expect(homePage.accountNameDropDown).toHaveAttribute('placeholder', accountNameT);
         await homePage.clickCloseTheWindowButton();
         await homePage.clickAccountsTab();
         await expect(accountsPage.specificAccountName(accountNameT)).toBeVisible();
@@ -42,7 +41,7 @@ test.describe('Creating Account, Contact and linking the necessities', () => {
         await expect(accountsPage.specificAccountName(accountNameT)).not.toBeVisible();
     });
 
-    test('Test 05: Create New Contact @regression', async ({ page }) => {
+    test('Test 05: Create New Contact', { tag: '@regression' }, async ({ page }) => {
         await homePage.clickContactsTab();
         await contactsPage.clickNewContactButton();
         await homePage.clickAccountNameDropDown();
@@ -50,14 +49,14 @@ test.describe('Creating Account, Contact and linking the necessities', () => {
         let contactName = 'Testlastname';
         await homePage.enterContactLastName(contactName);
         await homePage.clickSavebutton();
-        await expect(contactsPage.contactFileLastNamePlaceHolder).toHaveText(contactName, extendedTimeout);
+        await expect(contactsPage.contactFileLastNamePlaceHolder).toHaveText(contactName);
         await homePage.clickHomeCloudButton();
         await contactsPage.openSpecificContactActionsDropdown(contactName);
         await contactsPage.deleteContact();
         await expect(contactsPage.specificContactName(contactName)).not.toBeVisible();
     });
 
-    test('Test 06: Create New Opportunity @regression', async ({ page }) => {
+    test('Test 06: Create New Opportunity', { tag: '@regression' }, async ({ page }) => {
         await homePage.clickAccountsTab();
         await accountsPage.openSpecificAccountFile(accountName);
         await accountsPage.clickNewOpportunityButton();
@@ -69,8 +68,7 @@ test.describe('Creating Account, Contact and linking the necessities', () => {
         await expect(accountsPage.specificOpportunity(opportunityName)).not.toBeVisible();
     });
 
-    test('Test 07: Link a File to an Account @regression', async ({ page }) => {
-        await page.setViewportSize({ width: 1920, height: 1080 });
+    test('Test 07: Link a File to an Account', { tag: '@regression' }, async ({ page }) => {
         await homePage.clickAccountsTab();
         await accountsPage.openSpecificAccountFile(accountName);
         let uploadFileName = '70100005.JPG';
