@@ -27,6 +27,9 @@ export default class SalesPage extends BasePage {
     get deleteButton() {
         return this.page.getByRole('button', { name: 'Delete' });
     }
+    get leadLastNames() {
+        return this.page.locator(`a[data-refid="recordId"]`);
+    }
     specificLeadListName(leadLastname: string) {
         return this.page.locator(`a[data-refid="recordId"][title='${leadLastname}']`);
     }
@@ -66,6 +69,9 @@ export default class SalesPage extends BasePage {
     get goToLeadsButton() {
         return this.page.getByRole('button', { name: 'Go to Leads' });
     }
+    get leadsTab() {
+        return this.page.getByRole('link', { name: 'Leads' });
+    }
     
 
     constructor(page: Page) {
@@ -74,10 +80,13 @@ export default class SalesPage extends BasePage {
 
     
     async clickNewLeadButton() {
-        await this.newLeadButton.click(extendedTimeout);
+        await this.leadsTab.click();
+        await this.page.getByRole('row', { name: 'Select item 1' }).getByRole('button').waitFor({state: 'visible'});
+        await this.leadLastNames.waitFor({state: 'visible'});
+        await this.newLeadButton.click();
     }
     async enterLeadLastName(lastName: string) {
-        await this.newLeadLastNameInput.fill(lastName);
+        await this.newLeadLastNameInput.fill(lastName, extendedTimeout);
     } 
     async enterLeadCompany(leadCompany: string) {
         await this.newLeadCompanyInput.fill(leadCompany);
@@ -87,7 +96,7 @@ export default class SalesPage extends BasePage {
     }
 
     async clickLeadFileActionsDropDown() {
-        await this.leadFileActionsDropDown.click();
+        await this.leadFileActionsDropDown.click(extendedTimeout);
     }
     async deleteTheLead() {
         await this.deleteOption.click();
@@ -95,20 +104,22 @@ export default class SalesPage extends BasePage {
     }
 
     async openSpecificLeadFile(leadLastname: string) {
+        await this.leadsTab.click();
         await this.specificLeadListName(leadLastname).click()
     }
     async changeLeadStatus(desiredStatus: string) {
-        await this.specificStatusTab(desiredStatus).click();
+        await this.specificStatusTab(desiredStatus).click(extendedTimeout);
         await this.markAsCurrentButton.click();
     }
     async revertStatusToNew() {
         await this.specificStatusTab('New').locator('xpath=./descendant::lightning-icon[@icon-name="utility:check"]').waitFor({state: 'visible'});
         await this.specificStatusTab('New').click();
+        await this.page.locator('a[data-tab-name="New"][aria-selected="true"]').waitFor({state: 'visible'});
         await this.markAsCurrentButton.click();
     }
     async changeStatusToConverted() {
         await this.convertTheLeadButton.click();
-        await this.page.getByText('0 Account Matches', { exact: true }).waitFor({state: 'visible'});
+        await this.page.getByText('0 Account Matches', { exact: true }).waitFor({state: 'visible', ...extendedTimeout});
         await this.convertTheLeadPopupButton.click();
     } 
     async returnToLeads() {

@@ -20,20 +20,21 @@ test.describe('Creating Account, Contact and linking the necessities', () => {
         contactsPage = new ContactsPage(page);
     });
     test.beforeEach(async ({ page }) => {
-        await await homePage.navigateToApplication(process.env.BASE_URL!);
+        await homePage.navigateToApplication(process.env.BASE_URL!);
         await loginPage.login(process.env.TESTUSERNAME!, process.env.PASSWORD!);
+        await homePage.clickHomeTab();
+        await expect(homePage.titleText).toContainText('Welcome', extendedTimeout);
     });
 
-    test('Test 03: Create New Account', async ({ page }) => {
-        await homePage.clickHomeTab();
-        await expect(homePage.newContactButton).toBeEnabled(extendedTimeout);
-        await homePage.clickNewContactButton();
+    test('Test 04: Create New Account @regression', async ({ page }) => {
+        await homePage.clickContactsTab();
+        await contactsPage.clickNewContactButton();
         await homePage.clickAccountNameDropDown();
         await homePage.clickNewAccountOption();
         let accountNameT = 'TestAccount';
         await homePage.enterAccountName(accountNameT);
         await homePage.clickSavebutton();
-        await expect(homePage.accountNameDropDown).toHaveAttribute('placeholder', accountNameT);
+        await expect(homePage.accountNameDropDown).toHaveAttribute('placeholder', accountNameT, extendedTimeout);
         await homePage.clickCloseTheWindowButton();
         await homePage.clickAccountsTab();
         await expect(accountsPage.specificAccountName(accountNameT)).toBeVisible();
@@ -41,18 +42,22 @@ test.describe('Creating Account, Contact and linking the necessities', () => {
         await expect(accountsPage.specificAccountName(accountNameT)).not.toBeVisible();
     });
 
-    test('Test 04: Create New Contact', async ({ page }) => {
-        await homePage.clickHomeTab();
-        await homePage.clickNewContactButton();
+    test('Test 05: Create New Contact @regression', async ({ page }) => {
+        await homePage.clickContactsTab();
+        await contactsPage.clickNewContactButton();
         await homePage.clickAccountNameDropDown();
         await homePage.pickSpecificAccountOption('first_account');
         let contactName = 'Testlastname';
         await homePage.enterContactLastName(contactName);
         await homePage.clickSavebutton();
-        await expect(contactsPage.contactFileLastNamePlaceHolder).toHaveText(contactName);
+        await expect(contactsPage.contactFileLastNamePlaceHolder).toHaveText(contactName, extendedTimeout);
+        await homePage.clickHomeCloudButton();
+        await contactsPage.openSpecificContactActionsDropdown(contactName);
+        await contactsPage.deleteContact();
+        await expect(contactsPage.specificContactName(contactName)).not.toBeVisible();
     });
 
-    test('Test 05: Create New Opportunity', async ({ page }) => {
+    test('Test 06: Create New Opportunity @regression', async ({ page }) => {
         await homePage.clickAccountsTab();
         await accountsPage.openSpecificAccountFile(accountName);
         await accountsPage.clickNewOpportunityButton();
@@ -64,7 +69,7 @@ test.describe('Creating Account, Contact and linking the necessities', () => {
         await expect(accountsPage.specificOpportunity(opportunityName)).not.toBeVisible();
     });
 
-    test('Test 06: Link a File to a Account', async ({ page }) => {
+    test('Test 07: Link a File to an Account @regression', async ({ page }) => {
         await page.setViewportSize({ width: 1920, height: 1080 });
         await homePage.clickAccountsTab();
         await accountsPage.openSpecificAccountFile(accountName);

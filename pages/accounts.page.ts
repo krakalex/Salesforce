@@ -1,6 +1,7 @@
 import { Page } from '@playwright/test';
 import BasePage from './base.page';
 import path from 'path';
+import { extendedTimeout } from 'playwright.config';
 
 export default class AccountPage extends BasePage {
     specificAccountName(accountName: String) {
@@ -76,31 +77,31 @@ export default class AccountPage extends BasePage {
         await this.allAccountNames.filter({ hasText: `${accountName}` });
     }
     async deleteSpecificAccount(accountName: String) {
-        await this.accountsHeading.waitFor({state: 'visible'});
+        await this.accountsHeading.waitFor({state: 'visible', ...extendedTimeout});
         await this.allAccountNames.filter({ hasText: `${accountName}` }).click();
         await this.accountActionsDropdown.click();
         await this.deleteDropdownOption.click();
         await this.deleteButton.click();
     }
     async openSpecificAccountFile(accountName: String) {
-        await this.specificAccountName(accountName).click();
+        await this.specificAccountName(accountName).click(extendedTimeout);
     }
     async clickNewOpportunityButton() {
-        await this.newOpportunityButton.click();
+        await this.newOpportunityButton.click(extendedTimeout);
     }
     async enterOpportunityName(opportunityName: string) {
-        await this.newOpportunityNameInput.fill(opportunityName)
+        await this.newOpportunityNameInput.fill(opportunityName, extendedTimeout)
     }
     async saveNewOpportunity() {
         await this.saveButton.click();
     }
     async deleteSpecificOpportunity(opportunityName: string) {
         await this.firstOpportunityActionsDropdown.click();
-        await this.deleteTheOpportunityOption.click();
+        await this.deleteTheOpportunityOption.click(extendedTimeout);
         await this.deleteButton.click();
     }
     async uploadSpecificFile(filepath: string) {
-        await this.fileInput.setInputFiles(path.join('upload-data', filepath));
+        await this.fileInput.setInputFiles(path.join('upload-data', filepath), extendedTimeout);
     }
     async confirmUpload() {
         await this.doneUploadButton.click();

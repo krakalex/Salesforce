@@ -5,6 +5,12 @@ export default class ContactsPage extends BasePage {
     get contactFileLastNamePlaceHolder() {
         return this.page.locator('records-highlights2 lightning-formatted-name');
     }
+    get newContactButton() {
+        return this.page.getByRole('button', { name: 'New' });
+    }
+    get accountNameDropdown() {
+        return this.page.getByPlaceholder('Search Accounts...');
+    }
     specificContactName(contactName: String) {
         return this.page.locator(`a[data-refid="recordId"][title=${contactName}]`) 
     }
@@ -27,6 +33,9 @@ export default class ContactsPage extends BasePage {
 
     async getContactFileLastName() {
         return await this.contactFileLastNamePlaceHolder.textContent();
+    }
+    async clickNewContactButton() {
+        await this.newContactButton.click();
     }
     async openSpecificContactActionsDropdown(contactName: String) {
         await this.specificContactName(contactName).locator('xpath=./ancestor::tr/descendant::a[@role="button"]').click();

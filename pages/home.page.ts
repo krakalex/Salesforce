@@ -9,11 +9,20 @@ export default class HomePage extends BasePage {
     get homeTab() {
         return this.page.getByText('HomeHome');
     }
+    get homeCloudButton() {
+        return this.page.locator('#oneHeader').getByRole('link', { name: 'Home' });
+    }
     get accountsTab() {
         return this.page.locator('//span[text()="Accounts"][contains(@class, "small")]/parent::a[@tabindex="0"]');
     }
+    get accountsInnerTab() {
+        return this.page.getByLabel('Global', { exact: true }).getByRole('link', { name: 'Accounts' });
+    }
     get contactsTab() {
-        return this.page.getByRole('link', { name: 'Contacts', exact: true })
+        return this.page.getByRole('link', { name: 'Contacts', exact: true });
+    }
+    get contactsInnerTab() {
+        return this.page.getByLabel('Global', { exact: true }).getByRole('link', { name: 'Contacts' });
     }
     get newContactButton() {
         return this.page.locator('//div/input[@data-value="My Contacts"]/ancestor::div[contains(@class, "headerWrapping")]/child::lightning-button');
@@ -42,8 +51,25 @@ export default class HomePage extends BasePage {
     get salesTab() {
         return this.page.getByRole('link', { name: 'Sales' });
     }
-
-
+    get toDoListButton() {
+        return this.page.getByRole('button', { name: 'To Do List' });
+    }
+    get newTaskButton() {
+        return this.page.getByRole('button', { name: 'New Task' });
+    }
+    get newTaskSubjectDropdown() {
+        return this.page.getByLabel('*Subject');
+    }
+    get callOption() {
+        return this.page.getByRole('option', { name: 'Call' });
+    }
+    get callToDoRecord() {
+        return this.page.getByLabel('To Do List').getByRole('link', { name: 'Call' });
+    }
+    get markTheTaskAsCompleteButton() {
+        return this.page.getByTitle('Mark Complete');
+    }
+    
     constructor(page: Page) {
         super(page);
     }
@@ -52,23 +78,26 @@ export default class HomePage extends BasePage {
         return await this.homeTab.click(extendedTimeout);
     }
     async clickAccountsTab() {
-        await this.accountsTab.click();
+        await this.accountsTab.click(extendedTimeout);
+        await this.accountsInnerTab.click();
     }
     async clickContactsTab() {
-        await this.contactsTab.click();
+        await this.contactsTab.click(extendedTimeout);
+        await this.contactsInnerTab.click();
     }
 
     async clickNewContactButton() {
         await this.newContactButton.click();
     }
     async clickAccountNameDropDown() {
-        await this.accountNameDropDown.click();
+        await this.page.locator('force-record-avatar span').waitFor({state: 'visible', ...extendedTimeout});
+        await this.accountNameDropDown.click(extendedTimeout);
     }
     async clickNewAccountOption() {
         await this.newAccountOption.click();
     }
     async enterAccountName(accountName: string) {
-        await this.accountNameInput.fill(accountName)
+        await this.accountNameInput.fill(accountName, extendedTimeout)
     }
     async clickCloseTheWindowButton() {
         await this.closeTheWindowButton.click();
@@ -84,6 +113,22 @@ export default class HomePage extends BasePage {
     }
     async clickSalesTab() {
         await this.salesTab.click(extendedTimeout);
+    }
+    
+    async clickToDoListButton() {
+        await this.toDoListButton.click();
+    }
+    async addNewCallTask() {
+        await this.newTaskButton.click();
+        await this.newTaskSubjectDropdown.click(extendedTimeout);
+        await this.callOption.click();
+        await this.saveButton.click();
+    }
+    async markTheTaskAsComplete() {
+        return this.markTheTaskAsCompleteButton.click();
+    }
+    async clickHomeCloudButton() {
+        await this.homeCloudButton.click();
     }
 
 }   
