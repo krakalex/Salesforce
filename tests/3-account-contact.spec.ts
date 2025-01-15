@@ -45,7 +45,7 @@ test.describe('Creating Account, Contact and linking the necessities', () => {
         await homePage.clickContactsTab();
         await contactsPage.clickNewContactButton();
         await homePage.clickAccountNameDropDown();
-        await homePage.pickSpecificAccountOption('first_account');
+        await homePage.pickSpecificAccountOption(accountName);
         let contactName = 'Testlastname';
         await homePage.enterContactLastName(contactName);
         await homePage.clickSavebutton();
